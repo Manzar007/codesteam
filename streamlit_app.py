@@ -84,14 +84,6 @@ if 'SomeCategoryColumn' in filtered_data3a.columns:
 else:
     st.warning("No data for pie chart.")
 
-# New Graph: Correlation Heatmap
-st.header("Correlation Heatmap in Data3a")
-if filtered_data3a.shape[1] > 1:  # Requires more than one column to correlate
-    corr = filtered_data3a.corr()
-    st.heatmap(corr, title='Correlation Heatmap in Data3a')
-else:
-    st.warning("Not enough data for correlation heatmap.")
-
 # New Graph: Area Chart for Time-Series Data
 st.header("Area Chart for Time-Series Data in Data3a")
 if 'CumulativeDataColumn' in filtered_data3a.columns:
