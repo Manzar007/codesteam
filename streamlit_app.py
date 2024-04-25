@@ -93,7 +93,7 @@ if page == "Main Page":
     st.bar_chart(delay_df.set_index("Reason"))
 
 elif page == "Project Information":
-st.title("Project Information")
+    st.title("Project Information")
     st.write(
         "Through this project, I explored the relationship between flight delays, weather conditions, "
         "and other factors. I learned how to preprocess data, create various visualizations, and draw insights "
