@@ -74,13 +74,18 @@ if page == "Main Page":
     st.bar_chart(delay_df.set_index("Reason"))
 
 elif page == "Project Information":
-    st.title("Project Information")
-    # Writeup of what you learned and project details
+st.title("Project Information")
+    # Writeup of what you learned in 100 words
     st.write(
         "Through this project, I explored the relationship between flight delays, weather conditions, "
         "and other factors. I learned how to preprocess data, create various visualizations, and draw insights "
         "from them. The experience highlighted the importance of cleaning data and handling errors properly. "
-        "I also discovered the challenges in drawing conclusions from incomplete or noisy data."
+        "I also discovered the challenges in drawing conclusions from incomplete or noisy data. Overall, "
+        "the project helped me understand how different data sources can interact to reveal meaningful patterns."
+    )
+    st.write(
+        "There are some limitations with CSV data storage and built-in visualization tools, but the flexibility of Streamlit "
+        "allowed me to create an interactive web app for data exploration."
     )
 
 elif page == "Additional Questions":
