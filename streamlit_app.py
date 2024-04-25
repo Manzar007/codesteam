@@ -49,17 +49,6 @@ if len(selected_dates) == 2:
 else:
     st.warning("Please select a valid date range.")
 
-# Display dataframes
-st.header("Filtered Data")
-st.write("Data1 (Arrivals and Departures)")
-st.dataframe(filtered_data1)
-
-st.write("Data2 (Weather Conditions)")
-st.dataframe(filtered_data2)
-
-st.write("Data3a (Flight Delays and Cancellations)")
-st.dataframe(filtered_data3a)
-
 # Line chart for arrivals and departures
 st.header("Arrivals and Departures Over Time")
 if not filtered_data1.empty:
