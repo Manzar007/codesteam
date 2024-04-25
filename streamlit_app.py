@@ -92,6 +92,25 @@ elif page == "Additional Questions":
     st.write("Q2: What did you discover/what were your conclusions?")
     st.write("I discovered that weather conditions and other external factors could impact flight delays or cancellations. The data showed trends over time that aligned with known weather patterns and disruptions.")
 
+    st.write("Q3: What difficulties did you have in completing the project?")
+    st.write(
+        "I faced challenges with data consistency and handling missing or erroneous data. Additionally, limited "
+        "visualization options without external libraries made certain representations more challenging."
+    )
+
+    st.write("Q4: What skills did you wish you had while you were doing the project?")
+    st.write(
+        "I wished I had more advanced skills in data cleaning and handling complex data operations in pandas. "
+        "Also, deeper knowledge of data visualization techniques would have been helpful."
+    )
+
+    st.write("Q5: What would you do next to expand or augment the project?")
+    st.write(
+        "To expand the project, I would integrate additional data sources for weather, flight schedules, and airport information. "
+        "This would allow for a more comprehensive analysis of factors affecting flight operations. I would also improve the "
+        "user interface and interactivity to provide a more seamless experience."
+    )
+    
 elif page == "Dataset Description":
     st.title("Dataset Description")
     # Data Source information
