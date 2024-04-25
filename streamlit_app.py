@@ -73,14 +73,6 @@ if 'airline' in filtered_data1.columns:
 else:
     st.write("No airline data available.")
 
-# New Graph: Flight Delays by Reason
-st.header("Flight Delays by Reason")
-if 'LateAircraftDelay' in filtered_data3a.columns:
-    delay_reasons = filtered_data3a.groupby('LateAircraftDelay').size()
-    st.pie_chart(delay_reasons)
-else:
-    st.write("No data on flight delays.")
-
 # New Graph: Daily Flight Activity
 st.header("Daily Flight Activity")
 if not filtered_data1.empty:
