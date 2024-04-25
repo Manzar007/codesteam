@@ -65,6 +65,30 @@ if not filtered_data2.empty:
 else:
     st.warning("No weather data available for the selected date range.")
 
+# New Bar Chart for Cancelled Flights Over DayOfWeek
+st.header("Cancelled Flights Over DayOfWeek")
+if 'DayOfWeek' in filtered_data3a.columns and 'Cancelled' in filtered_data3a.columns:
+    cancelled_count = filtered_data3a.groupby("DayOfWeek")["Cancelled"].count()
+    st.bar_chart(cancelled_count)
+else:
+    st.warning("No data for cancelled flights.")
+
+# Bar Chart for Diverted Flights Over DayOfWeek
+st.header("Diverted Flights Over DayOfWeek")
+if 'DayOfWeek' in filtered_data3a.columns and 'Diverted' in filtered_data3a.columns:
+    diverted_count = filtered_data3a.groupby("DayOfWeek")["Diverted"].count()
+    st.bar_chart(diverted_count)
+else:
+    st.warning("No data for diverted flights.")
+
+# Bar Chart for Security Delays Over DayOfWeek
+st.header("Security Delays Over DayOfWeek")
+if 'DayOfWeek' in filtered_data3a.columns and 'SecurityDelay' in filtered_data3a.columns:
+    security_delay_count = filtered_data3a.groupby("DayOfWeek")["SecurityDelay"].count()
+    st.bar_chart(security_delay_count)
+else:
+    st.warning("No data for security delays.")
+
 # Additional insights and conclusions
 st.header("Conclusions and Insights")
 st.write("Based on the filtered data, here are some insights and conclusions:")
