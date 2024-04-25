@@ -32,17 +32,19 @@ selected_dates = st.sidebar.date_input(
 
 # Validate the selected_dates input
 if len(selected_dates) == 2:
+    # Convert selected dates to datetime
+    start_date = pd.Timestamp(selected_dates[0])
+    end_date = pd.Timestamp(selected_dates[1])
+
     # Filter data based on selected date range
     filtered_data1 = data1[
-        (data1["date"] >= selected_dates[0])
-        & (data1["date"] <= selected_dates[1])
+        (data1["date"] >= start_date) & (data1["date"] <= end_date)
     ]
     filtered_data2 = data2[
-        (data2["timepoint"] >= selected_dates[0])
-        & (data2["timepoint"] <= selected_dates[1])
+        (data2["timepoint"] >= start_date) & (data2["timepoint"] <= end_date)
     ]
     filtered_data3a = data3a[
-        (data3a["Date"] >= selected_dates[0]) & (data3a["Date"] <= selected_dates[1])
+        (data3a["Date"] >= start_date) & (data3a["Date"] <= end_date)
     ]
 else:
     st.warning("Please select a valid date range.")
