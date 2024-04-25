@@ -65,22 +65,6 @@ if not filtered_data2.empty:
 else:
     st.warning("No weather data available for the selected date range.")
 
-# New Graph: Flight Departures by Airline
-st.header("Flight Departures by Airline")
-if 'airline' in filtered_data1.columns:
-    airline_departures = filtered_data1.groupby('airline').size()
-    st.bar_chart(airline_departures)
-else:
-    st.write("No airline data available.")
-
-# New Graph: Daily Flight Activity
-st.header("Daily Flight Activity")
-if not filtered_data1.empty:
-    daily_flight_activity = filtered_data1.groupby("date").size()
-    st.line_chart(daily_flight_activity)
-else:
-    st.write("No flight activity data.")
-
 # New Graph: Temperature Variations Over Time
 st.header("Temperature Variations Over Time")
 if 'temp2m' in filtered_data2.columns:
@@ -88,6 +72,40 @@ if 'temp2m' in filtered_data2.columns:
     st.line_chart(temperature_variation)
 else:
     st.write("No temperature data available.")
+
+# New Graph: Categorical Distribution in data3a
+st.header("Distribution of Categorical Variables")
+if 'FlightType' in filtered_data3a.columns:
+    flight_type_count = filtered_data3a['FlightType'].value_counts()
+    st.bar_chart(flight_type_count)
+else:
+    st.write("No flight type data available.")
+
+# New Graph: Time-Series Analysis
+st.header("Time-Series Analysis")
+if 'DelayMinutes' in filtered_data3a.columns:
+    time_series = filtered_data3a[["Date", "DelayMinutes"]].set_index("Date")
+    st.line_chart(time_series)
+else:
+    st.write("No delay minutes data available.")
+
+# New Graph: Scatter Plot of Two Numerical Variables
+st.header("Scatter Plot of Two Numerical Variables")
+if 'DelayMinutes' in filtered_data3a.columns and 'OtherNumericColumn' in filtered_data3a.columns:
+    st.scatter_chart(
+        filtered_data3a[["DelayMinutes", "OtherNumericColumn"]]
+    )
+else:
+    st.write("Data required for scatter plot not available.")
+
+# New Graph: Box Plot for Numeric Data Distribution
+st.header("Box Plot for Data Distribution")
+if 'DelayMinutes' in filtered_data3a.columns:
+    st.box_chart(
+        filtered_data3a[['Date', 'DelayMinutes']]
+    )
+else:
+    st.write("Data required for box plot not available.")
 
 # Additional insights and conclusions
 st.header("Conclusions and Insights")
