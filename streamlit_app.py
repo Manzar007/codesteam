@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import plotly.express as px  # Using Plotly for advanced visualizations
 
 # Function to load and preprocess datasets from CSV files
 @st.cache_data
@@ -57,6 +58,54 @@ if not filtered_data1.empty:
     )
 else:
     st.warning("No data available for the selected date range.")
+
+# Additional Graphs for further insights
+
+# Bar chart for weather conditions
+st.header("Weather Conditions Over Time")
+if not filtered_data2.empty:
+    fig = px.bar(filtered_data2, x="timepoint", y="temp2m", color="cloudcover", title="Temperature and Cloud Cover Over Time")
+    st.plotly_chart(fig, use_container_width=True)
+else:
+    st.warning("No weather data available for the selected date range.")
+
+# Scatter plot for flight delays vs. weather conditions
+st.header("Flight Delays vs. Weather Conditions")
+if not filtered_data3a.empty:
+    fig = px.scatter(
+        filtered_data3a,
+        x="DepTime",
+        y="WeatherDelay",
+        color="UniqueCarrier",
+        title="Departure Time vs. Weather Delays",
+        labels={"DepTime": "Departure Time", "WeatherDelay": "Weather Delay (mins)"},
+    )
+    st.plotly_chart(fig, use_container_width=True)
+else:
+    st.warning("No delay data available for the selected date range.")
+
+# Bar chart for reasons of delays/cancellations
+st.header("Reasons for Delays and Cancellations")
+if not filtered_data3a.empty:
+    cancellation_codes = {
+        "A": "Carrier",
+        "B": "Weather",
+        "C": "National Aviation System",
+        "D": "Security",
+    }
+    filtered_data3a["CancellationReason"] = filtered_data3a["CancellationCode"].map(cancellation_codes)
+
+    fig = px.bar(
+        filtered_data3a,
+        x="Date",
+        y="LateAircraftDelay",
+        color="CancellationReason",
+        title="Reasons for Delays and Cancellations",
+        labels={"Date": "Date", "LateAircraftDelay": "Late Aircraft Delay (mins)"},
+    )
+    st.plotly_chart(fig, use_container_width=True)
+else:
+    st.warning("No data available for cancellation reasons.")
 
 # Display additional insights and explanations
 st.header("Conclusions and Insights")
