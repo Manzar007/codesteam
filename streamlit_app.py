@@ -136,19 +136,16 @@ elif page == "Additional Questions":
 elif page == "Dataset Description":
     st.title("Dataset Description")
     st.header("Data Source 1")
-    st.write("**URL:** [FlightAware - OERK](https://www.flightaware.com/live/airport/OERK)")
     st.write(
         "FlightAware offers flight tracking and aviation data services. Users can access real-time flight statuses, airport information, and historical flight data spanning from 2019 to 2024."
     )
 
     st.header("Data Source 2")
-    st.write("**URL:** [7timer.info - Weather Forecasting](https://www.7timer.info/bin/astro.php?lon=46.7&lat=25&ac=0&unit=metric&output=json&tzshift=0)")
     st.write(
         "7timer.info provides astronomical data through its API. Users can access information like sunrise, sunset, and moon phase. Gathering historical data from 2019 to 2024 for RUH requires repeated API requests."
     )
 
     st.header("Data Source 3")
-    st.write("**URL:** [Kaggle - Flight Delay and Causes](https://www.kaggle.com/datasets/undersc0re/flight-delay-and-causes)")
     st.write(
         "Kaggle's dataset provides comprehensive information about flight delays at Riyadh Airport, including reasons for delays, cancellations, and diversions."
     )
