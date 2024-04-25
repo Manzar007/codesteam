@@ -65,47 +65,40 @@ if not filtered_data2.empty:
 else:
     st.warning("No weather data available for the selected date range.")
 
-# New Graph: Temperature Variations Over Time
-st.header("Temperature Variations Over Time")
-if 'temp2m' in filtered_data2.columns:
-    temperature_variation = filtered_data2[["timepoint", "temp2m"]].set_index("timepoint")
-    st.line_chart(temperature_variation)
-else:
-    st.write("No temperature data available.")
-
-# New Graph: Categorical Distribution in data3a
-st.header("Distribution of Categorical Variables")
-if 'FlightType' in filtered_data3a.columns:
-    flight_type_count = filtered_data3a['FlightType'].value_counts()
-    st.bar_chart(flight_type_count)
-else:
-    st.write("No flight type data available.")
-
-# New Graph: Time-Series Analysis
-st.header("Time-Series Analysis")
-if 'DelayMinutes' in filtered_data3a.columns:
-    time_series = filtered_data3a[["Date", "DelayMinutes"]].set_index("Date")
-    st.line_chart(time_series)
-else:
-    st.write("No delay minutes data available.")
-
-# New Graph: Scatter Plot of Two Numerical Variables
-st.header("Scatter Plot of Two Numerical Variables")
-if 'DelayMinutes' in filtered_data3a.columns and 'OtherNumericColumn' in filtered_data3a.columns:
-    st.scatter_chart(
-        filtered_data3a[["DelayMinutes", "OtherNumericColumn"]]
+# New Graph: Histogram for Numerical Variable
+st.header("Histogram for Numerical Variable in Data3a")
+if 'SomeNumericColumn' in filtered_data3a.columns:
+    st.histogram(
+        filtered_data3a['SomeNumericColumn'],
+        bins=10,
+        title='Histogram for SomeNumericColumn'
     )
 else:
-    st.write("Data required for scatter plot not available.")
+    st.warning("No numerical data for histogram.")
 
-# New Graph: Box Plot for Numeric Data Distribution
-st.header("Box Plot for Data Distribution")
-if 'DelayMinutes' in filtered_data3a.columns:
-    st.box_chart(
-        filtered_data3a[['Date', 'DelayMinutes']]
-    )
+# New Graph: Pie Chart for Categorical Data
+st.header("Pie Chart for Categorical Data in Data3a")
+if 'SomeCategoryColumn' in filtered_data3a.columns:
+    category_counts = filtered_data3a['SomeCategoryColumn'].value_counts()
+    st.pie_chart(category_counts, title='Distribution of SomeCategoryColumn')
 else:
-    st.write("Data required for box plot not available.")
+    st.warning("No data for pie chart.")
+
+# New Graph: Correlation Heatmap
+st.header("Correlation Heatmap in Data3a")
+if filtered_data3a.shape[1] > 1:  # Requires more than one column to correlate
+    corr = filtered_data3a.corr()
+    st.heatmap(corr, title='Correlation Heatmap in Data3a')
+else:
+    st.warning("Not enough data for correlation heatmap.")
+
+# New Graph: Area Chart for Time-Series Data
+st.header("Area Chart for Time-Series Data in Data3a")
+if 'CumulativeDataColumn' in filtered_data3a.columns:
+    cumulative_data = filtered_data3a[["Date", "CumulativeDataColumn"]].set_index("Date")
+    st.area_chart(cumulative_data, title='Area Chart for Cumulative Data')
+else:
+    st.warning("No data for area chart.")
 
 # Additional insights and conclusions
 st.header("Conclusions and Insights")
