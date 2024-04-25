@@ -2,19 +2,16 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-# Function to load and preprocess datasets from CSV files
 @st.cache_data
 def load_csv_data(file_path, date_column):
     df = pd.read_csv(file_path)
     df[date_column] = pd.to_datetime(df[date_column], errors="coerce")
     return df
 
-# Load the datasets
 data1 = load_csv_data("Data1.csv", "date")
 data2 = load_csv_data("Data2.csv", "timepoint")
 data3a = load_csv_data("Data3a.csv", "Date")
 
-# Sidebar for navigation
 st.sidebar.title("Navigation")
 page = st.sidebar.radio("Go to", ["Main Page", "Project Information", "Additional Questions", "Dataset Description"])  # Added the new page here
 
@@ -23,7 +20,6 @@ if page == "Main Page":
     st.write("Created by XYZ123")
     st.write("This webapp provides various visualizations related to flight data, weather conditions, and reasons for flight delays or cancellations. You can use the sidebar to select a date range and explore different datasets.")
 
-    # Date range selector
     st.sidebar.header("Date Range Selector")
     start_date = data3a["Date"].min()
     end_date = data3a["Date"].max()
@@ -50,10 +46,11 @@ if page == "Main Page":
     else:
         st.warning("Please select a valid date range.")
 
-    # Graphs and insights
     st.header("Arrivals and Departures Over Time")
     if not filtered_data1.empty:
-        st.line_chart(filtered_data1[["date", "arrivals", "departures"]].set_index("date"))
+        st.line_chart(
+            filtered_data1[["date", "arrivals", "departures"]].set_index("date")
+        )
     else:
         st.warning("No data available for the selected date range.")
 
@@ -63,13 +60,35 @@ if page == "Main Page":
     else:
         st.warning("No weather data available for the selected date range.")
 
-    # Pie chart for delay reasons
+    st.header("Cancelled Flights Over DayOfWeek")
+    if 'DayOfWeek' in filtered_data3a.columns and 'Cancelled' in filtered_data3a.columns:
+        cancelled_count = filtered_data3a.groupby("DayOfWeek")["Cancelled"].count()
+        st.bar_chart(cancelled_count)
+    else:
+        st.warning("No data for cancelled flights.")
+
+    st.header("Diverted Flights Over DayOfWeek")
+    if 'DayOfWeek' in filtered_data3a.columns and 'Diverted' in filtered_data3a.columns:
+        diverted_count = filtered_data3a.groupby("DayOfWeek")["Diverted"].count()
+        st.bar_chart(diverted_count)
+    else:
+        st.warning("No data for diverted flights.")
+
+    st.header("Security Delays Over DayOfWeek")
+    if 'DayOfWeek' in filtered_data3a.columns and 'SecurityDelay' in filtered_data3a.columns:
+        security_delay_count = filtered_data3a.groupby("DayOfWeek")["SecurityDelay"].count()
+        st.bar_chart(security_delay_count)
+    else:
+        st.warning("No data for security delays.")
+
     delay_counts = {
         "Cancelled": filtered_data3a["Cancelled"].sum(),
         "Diverted": filtered_data3a["Diverted"].sum(),
         "SecurityDelay": filtered_data3a["SecurityDelay"].sum(),
     }
+
     delay_df = pd.DataFrame(list(delay_counts.items()), columns=["Reason", "Count"])
+
     st.header("Distribution of Reasons for Delay")
     st.bar_chart(delay_df.set_index("Reason"))
 
@@ -89,7 +108,6 @@ st.title("Project Information")
 
 elif page == "Additional Questions":
     st.title("Additional Questions")
-    # Answering additional questions
     st.write("Q1: What did you set out to study?")
     st.write("I set out to study the relationship between flight data, weather conditions, and reasons for delays or cancellations. The goal was to understand if specific factors had a notable impact on flight operations.")
 
@@ -117,7 +135,6 @@ elif page == "Additional Questions":
     
 elif page == "Dataset Description":
     st.title("Dataset Description")
-    # Data Source information
     st.header("Data Source 1")
     st.write("**URL:** [FlightAware - OERK](https://www.flightaware.com/live/airport/OERK)")
     st.write(
