@@ -65,33 +65,6 @@ if not filtered_data2.empty:
 else:
     st.warning("No weather data available for the selected date range.")
 
-# New Graph: Histogram for Numerical Variable
-st.header("Histogram for Numerical Variable in Data3a")
-if 'SomeNumericColumn' in filtered_data3a.columns:
-    st.histogram(
-        filtered_data3a['SomeNumericColumn'],
-        bins=10,
-        title='Histogram for SomeNumericColumn'
-    )
-else:
-    st.warning("No numerical data for histogram.")
-
-# New Graph: Pie Chart for Categorical Data
-st.header("Pie Chart for Categorical Data in Data3a")
-if 'SomeCategoryColumn' in filtered_data3a.columns:
-    category_counts = filtered_data3a['SomeCategoryColumn'].value_counts()
-    st.pie_chart(category_counts, title='Distribution of SomeCategoryColumn')
-else:
-    st.warning("No data for pie chart.")
-
-# New Graph: Area Chart for Time-Series Data
-st.header("Area Chart for Time-Series Data in Data3a")
-if 'CumulativeDataColumn' in filtered_data3a.columns:
-    cumulative_data = filtered_data3a[["Date", "CumulativeDataColumn"]].set_index("Date")
-    st.area_chart(cumulative_data, title='Area Chart for Cumulative Data')
-else:
-    st.warning("No data for area chart.")
-
 # Additional insights and conclusions
 st.header("Conclusions and Insights")
 st.write("Based on the filtered data, here are some insights and conclusions:")
