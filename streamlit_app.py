@@ -1,8 +1,6 @@
-pip install matplotlib
 import streamlit as st
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 
 # Set the title of the app
 st.title("Streamlit Example App")
@@ -34,11 +32,6 @@ if st.checkbox("Show Summary Statistics"):
     st.write("Summary statistics:")
     st.write(data.describe())
 
-# Add a custom Matplotlib plot
-st.subheader("Custom Plot with Matplotlib")
-fig, ax = plt.subplots()
-ax.scatter(data['x'], data['y'])
-ax.set_xlabel("X-axis")
-ax.set_ylabel("Y-axis")
-ax.set_title("Scatter Plot of Data")
-st.pyplot(fig)
+# Replace the Matplotlib plot with a simple text output
+st.subheader("Custom Output Section")
+st.write("This is a custom message instead of a Matplotlib plot.")
