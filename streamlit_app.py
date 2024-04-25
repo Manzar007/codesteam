@@ -65,12 +65,37 @@ if not filtered_data2.empty:
 else:
     st.warning("No weather data available for the selected date range.")
 
-# Scatter plot for flight delays vs. departure time
-st.header("Flight Delays Over Time")
-if not filtered_data3a.empty:
-    st.scatter_chart(filtered_data3a[["Date", "DepTime", "LateAircraftDelay"]])
+# New Graph: Flight Departures by Airline
+st.header("Flight Departures by Airline")
+if 'airline' in filtered_data1.columns:
+    airline_departures = filtered_data1.groupby('airline').size()
+    st.bar_chart(airline_departures)
 else:
-    st.warning("No data on flight delays.")
+    st.write("No airline data available.")
+
+# New Graph: Flight Delays by Reason
+st.header("Flight Delays by Reason")
+if 'LateAircraftDelay' in filtered_data3a.columns:
+    delay_reasons = filtered_data3a.groupby('LateAircraftDelay').size()
+    st.pie_chart(delay_reasons)
+else:
+    st.write("No data on flight delays.")
+
+# New Graph: Daily Flight Activity
+st.header("Daily Flight Activity")
+if not filtered_data1.empty:
+    daily_flight_activity = filtered_data1.groupby("date").size()
+    st.line_chart(daily_flight_activity)
+else:
+    st.write("No flight activity data.")
+
+# New Graph: Temperature Variations Over Time
+st.header("Temperature Variations Over Time")
+if 'temp2m' in filtered_data2.columns:
+    temperature_variation = filtered_data2[["timepoint", "temp2m"]].set_index("timepoint")
+    st.line_chart(temperature_variation)
+else:
+    st.write("No temperature data available.")
 
 # Additional insights and conclusions
 st.header("Conclusions and Insights")
