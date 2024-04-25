@@ -75,7 +75,6 @@ if page == "Main Page":
 
 elif page == "Project Information":
 st.title("Project Information")
-    # Writeup of what you learned in 100 words
     st.write(
         "Through this project, I explored the relationship between flight delays, weather conditions, "
         "and other factors. I learned how to preprocess data, create various visualizations, and draw insights "
