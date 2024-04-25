@@ -89,6 +89,16 @@ if 'DayOfWeek' in filtered_data3a.columns and 'SecurityDelay' in filtered_data3a
 else:
     st.warning("No data for security delays.")
 
+delay_counts = {
+    "Cancelled": filtered_data3a["Cancelled"].sum(),
+    "Diverted": filtered_data3a["Diverted"].sum(),
+    "SecurityDelay": filtered_data3a["SecurityDelay"].sum(),
+}
+
+# Create a pie chart to show the distribution of reasons for delay
+st.header("Distribution of Reasons for Delay")
+st.pie_chart(delay_counts)
+
 # Additional insights and conclusions
 st.header("Conclusions and Insights")
 st.write("Based on the filtered data, here are some insights and conclusions:")
