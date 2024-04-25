@@ -2,21 +2,23 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-# Function to load datasets from CSV files
+# Function to load and preprocess datasets from CSV files
 @st.cache_data
-def load_csv_data(file_path):
-    return pd.read_csv(file_path)
+def load_csv_data(file_path, date_column):
+    df = pd.read_csv(file_path)
+    # Convert specified column to datetime
+    df[date_column] = pd.to_datetime(df[date_column], errors="coerce")
+    return df
 
 # Load the datasets
-data1 = load_csv_data("Data1.csv")
-data2 = load_csv_data("Data2.csv")
-data3a = load_csv_data("Data3a.csv")
+data1 = load_csv_data("Data1.csv", "date")
+data2 = load_csv_data("Data2.csv", "timepoint")
+data3a = load_csv_data("Data3a.csv", "Date")
 
 # Sidebar for date range selection
 st.sidebar.header("Date Range Selector")
 
-# Get minimum and maximum dates from data
-data3a["Date"] = pd.to_datetime(data3a["Date"], format="%d-%m-%Y")
+# Get minimum and maximum dates from Data3a
 start_date = data3a["Date"].min()
 end_date = data3a["Date"].max()
 
@@ -28,18 +30,22 @@ selected_dates = st.sidebar.date_input(
     max_value=end_date,
 )
 
-# Filter data based on selected date range
-filtered_data1 = data1[
-    (pd.to_datetime(data1["date"]) >= selected_dates[0])
-    & (pd.to_datetime(data1["date"]) <= selected_dates[1])
-]
-filtered_data2 = data2[
-    (pd.to_datetime(data2["timepoint"]) >= selected_dates[0])
-    & (pd.to_datetime(data2["timepoint"]) <= selected_dates[1])
-]
-filtered_data3a = data3a[
-    (data3a["Date"] >= selected_dates[0]) & (data3a["Date"] <= selected_dates[1])
-]
+# Validate the selected_dates input
+if len(selected_dates) == 2:
+    # Filter data based on selected date range
+    filtered_data1 = data1[
+        (data1["date"] >= selected_dates[0])
+        & (data1["date"] <= selected_dates[1])
+    ]
+    filtered_data2 = data2[
+        (data2["timepoint"] >= selected_dates[0])
+        & (data2["timepoint"] <= selected_dates[1])
+    ]
+    filtered_data3a = data3a[
+        (data3a["Date"] >= selected_dates[0]) & (data3a["Date"] <= selected_dates[1])
+    ]
+else:
+    st.warning("Please select a valid date range.")
 
 # Display dataframes
 st.header("Filtered Data")
@@ -54,7 +60,12 @@ st.dataframe(filtered_data3a)
 
 # Line chart for arrivals and departures
 st.header("Arrivals and Departures Over Time")
-st.line_chart(filtered_data1[["date", "arrivals", "departures"]].set_index("date"))
+if not filtered_data1.empty:
+    st.line_chart(
+        filtered_data1[["date", "arrivals", "departures"]].set_index("date")
+    )
+else:
+    st.warning("No data available for the selected date range.")
 
 # Display additional insights and explanations
 st.header("Conclusions and Insights")
