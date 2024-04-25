@@ -95,9 +95,12 @@ delay_counts = {
     "SecurityDelay": filtered_data3a["SecurityDelay"].sum(),
 }
 
-# Create a pie chart to show the distribution of reasons for delay
+# Create a data frame from the dictionary
+delay_df = pd.DataFrame(list(delay_counts.items()), columns=["Reason", "Count"])
+
+# Pie chart in Streamlit
 st.header("Distribution of Reasons for Delay")
-st.pie_chart(delay_counts)
+st.bar_chart(delay_df.set_index("Reason"))
 
 # Additional insights and conclusions
 st.header("Conclusions and Insights")
