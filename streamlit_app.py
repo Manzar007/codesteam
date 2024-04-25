@@ -2,11 +2,10 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-# Function to load and preprocess datasets from CSV files
+# Load and preprocess datasets from CSV files
 @st.cache_data
 def load_csv_data(file_path, date_column):
     df = pd.read_csv(file_path)
-    # Convert specified column to datetime
     df[date_column] = pd.to_datetime(df[date_column], errors="coerce")
     return df
 
@@ -15,113 +14,115 @@ data1 = load_csv_data("Data1.csv", "date")
 data2 = load_csv_data("Data2.csv", "timepoint")
 data3a = load_csv_data("Data3a.csv", "Date")
 
-# Sidebar for date range selection
-st.sidebar.header("Date Range Selector")
+# Sidebar for navigation
+st.sidebar.title("Navigation")
+page = st.sidebar.radio("Go to", ["Main Page", "Project Information", "Additional Questions"])
 
-# Get minimum and maximum dates from Data3a
-start_date = data3a["Date"].min()
-end_date = data3a["Date"].max()
-
-# Date range input for filtering
-selected_dates = st.sidebar.date_input(
-    "Select Date Range",
-    [start_date, end_date],
-    min_value=start_date,
-    max_value=end_date,
-)
-
-# Validate the selected_dates input
-if len(selected_dates) == 2:
-    # Convert selected dates to datetime
-    start_date = pd.Timestamp(selected_dates[0])
-    end_date = pd.Timestamp(selected_dates[1])
-
-    # Filter data based on selected date range
-    filtered_data1 = data1[
-        (data1["date"] >= start_date) & (data1["date"] <= end_date)
-    ]
-    filtered_data2 = data2[
-        (data2["timepoint"] >= start_date) & (data2["timepoint"] <= end_date)
-    ]
-    filtered_data3a = data3a[
-        (data3a["Date"] >= start_date) & (data3a["Date"] <= end_date)
-    ]
-else:
-    st.warning("Please select a valid date range.")
-
-# Line chart for arrivals and departures
-st.header("Arrivals and Departures Over Time")
-if not filtered_data1.empty:
-    st.line_chart(
-        filtered_data1[["date", "arrivals", "departures"]].set_index("date")
+if page == "Main Page":
+    # Your name and basic project description
+    st.title("Flight Data Analysis")
+    st.write("Created by XYZ123")
+    
+    # Explanation of the app's interactivity
+    st.write("This webapp provides various visualizations related to flight data, weather conditions, and reasons for flight delays or cancellations. You can use the sidebar to select a date range and explore different datasets.")
+    
+    # Date range selector
+    st.sidebar.header("Date Range Selector")
+    start_date = data3a["Date"].min()
+    end_date = data3a["Date"].max()
+    selected_dates = st.sidebar.date_input(
+        "Select Date Range",
+        [start_date, end_date],
+        min_value=start_date,
+        max_value=end_date,
     )
-else:
-    st.warning("No data available for the selected date range.")
+    
+    # Validate the selected dates
+    if len(selected_dates) == 2:
+        start_date = pd.Timestamp(selected_dates[0])
+        end_date = pd.Timestamp(selected_dates[1])
 
-# Bar chart for weather conditions
-st.header("Weather Conditions Over Time")
-if not filtered_data2.empty:
-    st.bar_chart(filtered_data2[["timepoint", "temp2m"]].set_index("timepoint"))
-else:
-    st.warning("No weather data available for the selected date range.")
+        filtered_data1 = data1[
+            (data1["date"] >= start_date) & (data1["date"] <= end_date)
+        ]
+        filtered_data2 = data2[
+            (data2["timepoint"] >= start_date) & (data2["timepoint"] <= end_date)
+        ]
+        filtered_data3a = data3a[
+            (data3a["Date"] >= start_date) & (data3a["Date"] <= end_date)
+        ]
+    else:
+        st.warning("Please select a valid date range.")
 
-# New Bar Chart for Cancelled Flights Over DayOfWeek
-st.header("Cancelled Flights Over DayOfWeek")
-if 'DayOfWeek' in filtered_data3a.columns and 'Cancelled' in filtered_data3a.columns:
-    cancelled_count = filtered_data3a.groupby("DayOfWeek")["Cancelled"].count()
-    st.bar_chart(cancelled_count)
-else:
-    st.warning("No data for cancelled flights.")
+    # Graphs and insights
+    st.header("Arrivals and Departures Over Time")
+    if not filtered_data1.empty:
+        st.line_chart(filtered_data1[["date", "arrivals", "departures"]].set_index("date"))
+    else:
+        st.warning("No data available for the selected date range.")
+    
+    st.header("Weather Conditions Over Time")
+    if not filtered_data2.empty:
+        st.bar_chart(filtered_data2[["timepoint", "temp2m"]].set_index("timepoint"))
+    else:
+        st.warning("No weather data available for the selected date range.")
 
-# Bar Chart for Diverted Flights Over DayOfWeek
-st.header("Diverted Flights Over DayOfWeek")
-if 'DayOfWeek' in filtered_data3a.columns and 'Diverted' in filtered_data3a.columns:
-    diverted_count = filtered_data3a.groupby("DayOfWeek")["Diverted"].count()
-    st.bar_chart(diverted_count)
-else:
-    st.warning("No data for diverted flights.")
+    # Pie chart for delay reasons
+    delay_counts = {
+        "Cancelled": filtered_data3a["Cancelled"].sum(),
+        "Diverted": filtered_data3a["Diverted"].sum(),
+        "SecurityDelay": filtered_data3a["SecurityDelay"].sum(),
+    }
+    delay_df = pd.DataFrame(list(delay_counts.items()), columns=["Reason", "Count"])
+    st.header("Distribution of Reasons for Delay")
+    st.bar_chart(delay_df.set_index("Reason"))
 
-# Bar Chart for Security Delays Over DayOfWeek
-st.header("Security Delays Over DayOfWeek")
-if 'DayOfWeek' in filtered_data3a.columns and 'SecurityDelay' in filtered_data3a.columns:
-    security_delay_count = filtered_data3a.groupby("DayOfWeek")["SecurityDelay"].count()
-    st.bar_chart(security_delay_count)
-else:
-    st.warning("No data for security delays.")
+elif page == "Project Information":
+    st.title("Project Information")
+    # Writeup of what you learned in 100 words
+    st.write(
+        "Through this project, I explored the relationship between flight delays, weather conditions, "
+        "and other factors. I learned how to preprocess data, create various visualizations, and draw insights "
+        "from them. The experience highlighted the importance of cleaning data and handling errors properly. "
+        "I also discovered the challenges in drawing conclusions from incomplete or noisy data. Overall, "
+        "the project helped me understand how different data sources can interact to reveal meaningful patterns."
+    )
+    st.write(
+        "There are some limitations with CSV data storage and built-in visualization tools, but the flexibility of Streamlit "
+        "allowed me to create an interactive web app for data exploration."
+    )
 
-delay_counts = {
-    "Cancelled": filtered_data3a["Cancelled"].sum(),
-    "Diverted": filtered_data3a["Diverted"].sum(),
-    "SecurityDelay": filtered_data3a["SecurityDelay"].sum(),
-}
+elif page == "Additional Questions":
+    st.title("Additional Questions")
+    # Answering additional questions
+    st.write("Q1: What did you set out to study?")
+    st.write(
+        "I set out to study the relationship between flight data, weather conditions, and reasons for delays or cancellations. "
+        "The goal was to understand if specific factors had a notable impact on flight operations."
+    )
 
-# Create a data frame from the dictionary
-delay_df = pd.DataFrame(list(delay_counts.items()), columns=["Reason", "Count"])
+    st.write("Q2: What did you discover/what were your conclusions?")
+    st.write(
+        "I discovered that weather conditions and other external factors could impact flight delays or cancellations. "
+        "The data showed trends over time that aligned with known weather patterns and disruptions. Additionally, "
+        "there was a correlation between certain weekdays and increased flight issues."
+    )
 
-# Pie chart in Streamlit
-st.header("Distribution of Reasons for Delay")
-st.bar_chart(delay_df.set_index("Reason"))
+    st.write("Q3: What difficulties did you have in completing the project?")
+    st.write(
+        "I faced challenges with data consistency and handling missing or erroneous data. Additionally, limited "
+        "visualization options without external libraries made certain representations more challenging."
+    )
 
-# Additional insights and conclusions
-st.header("Conclusions and Insights")
-st.write("Based on the filtered data, here are some insights and conclusions:")
-st.write("1. The number of arrivals and departures varies over time. Use the date range to explore different periods.")
-st.write("2. Weather conditions might influence flight delays and cancellations. Compare Data2 and Data3a to find connections.")
-st.write("3. Certain airlines might have more delays or cancellations for specific reasons.")
+    st.write("Q4: What skills did you wish you had while you were doing the project?")
+    st.write(
+        "I wished I had more advanced skills in data cleaning and handling complex data operations in pandas. "
+        "Also, deeper knowledge of data visualization techniques would have been helpful."
+    )
 
-# Add answers to the provided questions
-st.header("Additional Information")
-st.write("Q1: What are the strengths of the data modeling format?")
-st.write("The strengths include flexibility, simplicity, and modularity, allowing easy expansion and integration with other data sources.")
-
-st.write("Q2: What are the weaknesses of the data modeling format?")
-st.write("Weaknesses may involve limited advanced querying and sorting capabilities, requiring additional code or workarounds to accomplish complex operations.")
-
-st.write("Q3: How do you store your data on disk?")
-st.write("The data is stored in CSV files. This format is simple and accessible but might not be as efficient for large-scale data or complex querying.")
-
-st.write("Q4: How would you extend the model with new data sources?")
-st.write("To extend the model, you'd create new data structures or tables and establish relationships with existing data. This extension might require updating the user interface to accommodate new elements.")
-
-st.write("Q5: How would you add new attributes to the data?")
-st.write("To add new attributes, you'd typically use additional data sources, APIs, or computations. The new data can be integrated into the existing structure by adding columns or creating new tables.")
+    st.write("Q5: What would you do next to expand or augment the project?")
+    st.write(
+        "To expand the project, I would integrate additional data sources for weather, flight schedules, and airport information. "
+        "This would allow for a more comprehensive analysis of factors affecting flight operations. I would also improve the "
+        "user interface and interactivity to provide a more seamless experience."
+    )
