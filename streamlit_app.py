@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-# Load and preprocess datasets from CSV files
+# Function to load and preprocess datasets from CSV files
 @st.cache_data
 def load_csv_data(file_path, date_column):
     df = pd.read_csv(file_path)
@@ -16,16 +16,13 @@ data3a = load_csv_data("Data3a.csv", "Date")
 
 # Sidebar for navigation
 st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["Main Page", "Project Information", "Additional Questions"])
+page = st.sidebar.radio("Go to", ["Main Page", "Project Information", "Additional Questions", "Dataset Description"])  # Added the new page here
 
 if page == "Main Page":
-    # Your name and basic project description
     st.title("Flight Data Analysis")
     st.write("Created by XYZ123")
-    
-    # Explanation of the app's interactivity
     st.write("This webapp provides various visualizations related to flight data, weather conditions, and reasons for flight delays or cancellations. You can use the sidebar to select a date range and explore different datasets.")
-    
+
     # Date range selector
     st.sidebar.header("Date Range Selector")
     start_date = data3a["Date"].min()
@@ -37,7 +34,6 @@ if page == "Main Page":
         max_value=end_date,
     )
     
-    # Validate the selected dates
     if len(selected_dates) == 2:
         start_date = pd.Timestamp(selected_dates[0])
         end_date = pd.Timestamp(selected_dates[1])
@@ -60,7 +56,7 @@ if page == "Main Page":
         st.line_chart(filtered_data1[["date", "arrivals", "departures"]].set_index("date"))
     else:
         st.warning("No data available for the selected date range.")
-    
+
     st.header("Weather Conditions Over Time")
     if not filtered_data2.empty:
         st.bar_chart(filtered_data2[["timepoint", "temp2m"]].set_index("timepoint"))
@@ -79,83 +75,40 @@ if page == "Main Page":
 
 elif page == "Project Information":
     st.title("Project Information")
-    # Writeup of what you learned in 100 words
+    # Writeup of what you learned and project details
     st.write(
         "Through this project, I explored the relationship between flight delays, weather conditions, "
         "and other factors. I learned how to preprocess data, create various visualizations, and draw insights "
         "from them. The experience highlighted the importance of cleaning data and handling errors properly. "
-        "I also discovered the challenges in drawing conclusions from incomplete or noisy data. Overall, "
-        "the project helped me understand how different data sources can interact to reveal meaningful patterns."
-    )
-    st.write(
-        "There are some limitations with CSV data storage and built-in visualization tools, but the flexibility of Streamlit "
-        "allowed me to create an interactive web app for data exploration."
+        "I also discovered the challenges in drawing conclusions from incomplete or noisy data."
     )
 
 elif page == "Additional Questions":
     st.title("Additional Questions")
     # Answering additional questions
     st.write("Q1: What did you set out to study?")
-    st.write(
-        "I set out to study the relationship between flight data, weather conditions, and reasons for delays or cancellations. "
-        "The goal was to understand if specific factors had a notable impact on flight operations."
-    )
+    st.write("I set out to study the relationship between flight data, weather conditions, and reasons for delays or cancellations. The goal was to understand if specific factors had a notable impact on flight operations.")
 
     st.write("Q2: What did you discover/what were your conclusions?")
-    st.write(
-        "I discovered that weather conditions and other external factors could impact flight delays or cancellations. "
-        "The data showed trends over time that aligned with known weather patterns and disruptions. Additionally, "
-        "there was a correlation between certain weekdays and increased flight issues."
-    )
-
-    st.write("Q3: What difficulties did you have in completing the project?")
-    st.write(
-        "I faced challenges with data consistency and handling missing or erroneous data. Additionally, limited "
-        "visualization options without external libraries made certain representations more challenging."
-    )
-
-    st.write("Q4: What skills did you wish you had while you were doing the project?")
-    st.write(
-        "I wished I had more advanced skills in data cleaning and handling complex data operations in pandas. "
-        "Also, deeper knowledge of data visualization techniques would have been helpful."
-    )
-
-    st.write("Q5: What would you do next to expand or augment the project?")
-    st.write(
-        "To expand the project, I would integrate additional data sources for weather, flight schedules, and airport information. "
-        "This would allow for a more comprehensive analysis of factors affecting flight operations. I would also improve the "
-        "user interface and interactivity to provide a more seamless experience."
-    )
+    st.write("I discovered that weather conditions and other external factors could impact flight delays or cancellations. The data showed trends over time that aligned with known weather patterns and disruptions.")
 
 elif page == "Dataset Description":
-    # New page for dataset descriptions
     st.title("Dataset Description")
-    
+    # Data Source information
     st.header("Data Source 1")
     st.write("**URL:** [FlightAware - OERK](https://www.flightaware.com/live/airport/OERK)")
-    st.write("**Description:**")
     st.write(
-        "FlightAware is a website offering flight tracking and aviation data services. By navigating to the King Khalid International Airport (OERK) page, "
-        "users can access real-time flight statuses, airport information, and historical flight data spanning from 2019 to 2024. This data includes "
-        "details like departure/arrival times, aircraft types, and routes. FlightAware's intuitive interface allows users to search for specific flights "
-        "or filter data by date range. This platform is valuable for researchers, aviation professionals, and enthusiasts alike."
+        "FlightAware offers flight tracking and aviation data services. Users can access real-time flight statuses, airport information, and historical flight data spanning from 2019 to 2024."
     )
 
     st.header("Data Source 2")
     st.write("**URL:** [7timer.info - Weather Forecasting](https://www.7timer.info/bin/astro.php?lon=46.7&lat=25&ac=0&unit=metric&output=json&tzshift=0)")
-    st.write("**Description:**")
     st.write(
-        "The 7timer.info is a weather forecasting website providing astronomical data through its API. By inputting longitude, latitude, and other parameters, "
-        "users can access JSON-formatted information like sunrise, sunset, and moon phase. To gather historical data from 2019 to 2024 for RUH (presumably Riyadh), "
-        "repeated API requests with adjusted date parameters are necessary. The data covers weather forecasts and astronomical calculations, serving as a valuable resource for retrieving past astronomical events and patterns for specified locations."
+        "7timer.info provides astronomical data through its API. Users can access information like sunrise, sunset, and moon phase. Gathering historical data from 2019 to 2024 for RUH requires repeated API requests."
     )
 
     st.header("Data Source 3")
     st.write("**URL:** [Kaggle - Flight Delay and Causes](https://www.kaggle.com/datasets/undersc0re/flight-delay-and-causes)")
-    st.write("**Description:**")
     st.write(
-        "This dataset from Kaggle provides comprehensive information about flight delays at Riyadh Airport. It includes data on scheduled and actual departure and arrival times, carrier information, "
-        "flight numbers, aircraft details, flight durations, distances between airports, taxi times, cancellations, diversions, and reasons for delays. Each delay reason is categorized, "
-        "including carrier delays (e.g., maintenance issues), weather-related delays, delays due to the National Aviation System (NAS), security-related delays, and delays caused by late aircraft arrivals. "
-        "Additionally, it offers insights into cancellations and diversions. This dataset spans a period from January to June 2019, providing data for analyzing flight delays and their contributing factors."
+        "Kaggle's dataset provides comprehensive information about flight delays at Riyadh Airport, including reasons for delays, cancellations, and diversions."
     )
