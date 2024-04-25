@@ -126,3 +126,36 @@ elif page == "Additional Questions":
         "This would allow for a more comprehensive analysis of factors affecting flight operations. I would also improve the "
         "user interface and interactivity to provide a more seamless experience."
     )
+
+elif page == "Dataset Description":
+    # New page for dataset descriptions
+    st.title("Dataset Description")
+    
+    st.header("Data Source 1")
+    st.write("**URL:** [FlightAware - OERK](https://www.flightaware.com/live/airport/OERK)")
+    st.write("**Description:**")
+    st.write(
+        "FlightAware is a website offering flight tracking and aviation data services. By navigating to the King Khalid International Airport (OERK) page, "
+        "users can access real-time flight statuses, airport information, and historical flight data spanning from 2019 to 2024. This data includes "
+        "details like departure/arrival times, aircraft types, and routes. FlightAware's intuitive interface allows users to search for specific flights "
+        "or filter data by date range. This platform is valuable for researchers, aviation professionals, and enthusiasts alike."
+    )
+
+    st.header("Data Source 2")
+    st.write("**URL:** [7timer.info - Weather Forecasting](https://www.7timer.info/bin/astro.php?lon=46.7&lat=25&ac=0&unit=metric&output=json&tzshift=0)")
+    st.write("**Description:**")
+    st.write(
+        "The 7timer.info is a weather forecasting website providing astronomical data through its API. By inputting longitude, latitude, and other parameters, "
+        "users can access JSON-formatted information like sunrise, sunset, and moon phase. To gather historical data from 2019 to 2024 for RUH (presumably Riyadh), "
+        "repeated API requests with adjusted date parameters are necessary. The data covers weather forecasts and astronomical calculations, serving as a valuable resource for retrieving past astronomical events and patterns for specified locations."
+    )
+
+    st.header("Data Source 3")
+    st.write("**URL:** [Kaggle - Flight Delay and Causes](https://www.kaggle.com/datasets/undersc0re/flight-delay-and-causes)")
+    st.write("**Description:**")
+    st.write(
+        "This dataset from Kaggle provides comprehensive information about flight delays at Riyadh Airport. It includes data on scheduled and actual departure and arrival times, carrier information, "
+        "flight numbers, aircraft details, flight durations, distances between airports, taxi times, cancellations, diversions, and reasons for delays. Each delay reason is categorized, "
+        "including carrier delays (e.g., maintenance issues), weather-related delays, delays due to the National Aviation System (NAS), security-related delays, and delays caused by late aircraft arrivals. "
+        "Additionally, it offers insights into cancellations and diversions. This dataset spans a period from January to June 2019, providing data for analyzing flight delays and their contributing factors."
+    )
